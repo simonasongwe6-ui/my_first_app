@@ -1,30 +1,46 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:my_first_app/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('shows both greetings and uses a custom theme seed', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(
+      tester.widget<MaterialApp>(find.byType(MaterialApp)).title,
+      'My First Flutter App',
+    );
+    expect(find.text('My First Flutter App'), findsOneWidget);
+    expect(find.text('Hello, Simon Akuma Asongwe!'), findsOneWidget);
+    expect(
+      find.text('Welcome to Introduction to Mobile Applications!'),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byType(Column),
+        matching: find.text('Hello, Simon Akuma Asongwe!'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byType(Column),
+        matching: find.text('Welcome to Introduction to Mobile Applications!'),
+      ),
+      findsOneWidget,
+    );
+    expect(find.byType(FloatingActionButton), findsNothing);
+    expect(
+      tester
+          .widget<MaterialApp>(find.byType(MaterialApp))
+          .theme!
+          .colorScheme
+          .primary,
+      ColorScheme.fromSeed(seedColor: Colors.teal).primary,
+    );
   });
 }
